@@ -2,6 +2,15 @@
 if getgenv().BBH_MainLoaded then return end
 getgenv().BBH_MainLoaded = true
 
+-- Anti AFK system
+task.spawn(function()
+    local vu = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+        vu:CaptureController()
+        vu:ClickButton2(Vector2.new())
+    end)
+end)
+
 local Rep = game:GetService("ReplicatedStorage")
 local spawnRemote = Rep.Events.RemoteFunction.PlayerSpawn
 local replayRemote = Rep.Events.RemoteEvent.Replay
@@ -11,7 +20,7 @@ _G.AutoReplay = false
 
 local gui = Instance.new("ScreenGui", game.CoreGui)
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0,200,0,110)
+frame.Size = UDim2.new(0,200,0,140)
 frame.Position = UDim2.new(0.7,0,0.3,0)
 frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
 frame.Active = true
@@ -55,8 +64,12 @@ newBtn("Auto Replay OFF", 40, function(btn)
                 pcall(function()
                     replayRemote:FireServer()
                 end)
-                task.wait(1)
+                task.wait(2)
             end
         end)
     end
+end)
+
+newBtn("Anti-AFK ✅ (AUTO)", 75, function()
+    -- button exists just for info, system auto works
 end)
